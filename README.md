@@ -115,3 +115,7 @@ Feito por **Pedro Henrique** — [LinkedIn](https://www.linkedin.com/in/pedrohen
 <a id="screenshots"></a>
 
 ## Screenshots
+<img width="1483" height="908" alt="image" src="https://github.com/user-attachments/assets/7d31b51e-d217-45c4-a3cc-e6bd8f89d4af" />
+
+<img width="1426" height="880" alt="image" src="https://github.com/user-attachments/assets/2ddface4-10fc-4f31-b22d-824433bc4348" />
+
