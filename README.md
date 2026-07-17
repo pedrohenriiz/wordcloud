@@ -53,8 +53,8 @@ A solução implementada em `lib/placement.ts`: cada palavra é medida com `canv
 ## Rodando localmente
 
 ```bash
-git clone https://github.com/seu-usuario/quadro-de-palavras.git
-cd quadro-de-palavras
+git clone https://github.com/seu-usuario/wordcloud.git
+cd wordcloud
 npm install
 npm run dev
 ```
