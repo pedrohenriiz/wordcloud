@@ -2,7 +2,7 @@
 
 Cole qualquer texto e veja as palavras mais frequentes ganharem destaque num quadro tipográfico, como um mural de espécimes: tamanho, cor e posição refletem o quanto cada palavra se repete.
 
-**[🔗 Demo ao vivo](#)** · **[📸 Screenshot abaixo](#screenshots)**
+**[🔗 Demo ao vivo](https://pedrohenriiz.github.io/wordcloud/)** · **[📸 Screenshot abaixo](#screenshots)**
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
