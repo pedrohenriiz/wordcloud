@@ -31,6 +31,7 @@ function rectsOverlap(a: Rect, b: Rect, pad = 3): boolean {
   );
 }
 
+/** Espiral de Arquimedes: dado um passo t, devolve um deslocamento (dx, dy). */
 function spiralPoint(t: number, aspect: number): [number, number] {
   const angle = t * 0.35;
   const radius = t * 3.2;
@@ -98,49 +99,65 @@ export function layoutWords(
 
   words.forEach((w, i) => {
     const norm = (w.count - minCount) / range;
-    const fontSize = Math.round(minFont + norm * (maxFont - minFont));
     const weight = norm > 0.55 ? 600 : 500;
-    const { width, height } = measure(
-      w.text,
-      fontSize,
-      options.fontFamily,
-      weight,
-    );
+
+    // Tamanho "ideal" pela frequência. Se a palavra não couber nesse tamanho
+    // (comum em palavras longas com alta frequência), a fonte é reduzida
+    // progressivamente até caber — em vez de descartar a palavra.
+    let fontSize = Math.round(minFont + norm * (maxFont - minFont));
+    const minAllowedFont = Math.max(10, minFont * 0.55);
 
     let x = 0;
     let y = 0;
+    let width = 0;
+    let height = 0;
     let found = false;
 
-    // primeiro tenta o centro exato para a palavra mais frequente
-    for (let t = 0; t < 4000; t += 1) {
-      const [dx, dy] = spiralPoint(t, aspect);
-      x = dx;
-      y = dy;
+    while (!found && fontSize >= minAllowedFont) {
+      const measured = measure(w.text, fontSize, options.fontFamily, weight);
+      width = measured.width;
+      height = measured.height;
 
-      const rect: Rect = {
-        x: x - width / 2,
-        y: y - height / 2,
-        width,
-        height,
-      };
+      // se nem sozinha ela cabe no quadro nesse tamanho, nem vale gastar
+      // tentativas de espiral: já reduz a fonte de uma vez.
+      if (width >= canvasWidth * 0.94 || height >= canvasHeight * 0.9) {
+        fontSize = Math.round(fontSize * 0.85);
+        continue;
+      }
 
-      const withinBounds =
-        rect.x > -canvasWidth / 2 &&
-        rect.x + rect.width < canvasWidth / 2 &&
-        rect.y > -canvasHeight / 2 &&
-        rect.y + rect.height < canvasHeight / 2;
+      for (let t = 0; t < 2500; t += 1) {
+        const [dx, dy] = spiralPoint(t, aspect);
+        const rect: Rect = {
+          x: dx - width / 2,
+          y: dy - height / 2,
+          width,
+          height,
+        };
 
-      if (!withinBounds) continue;
+        const withinBounds =
+          rect.x > -canvasWidth / 2 &&
+          rect.x + rect.width < canvasWidth / 2 &&
+          rect.y > -canvasHeight / 2 &&
+          rect.y + rect.height < canvasHeight / 2;
 
-      const overlaps = placed.some((p) => rectsOverlap(rect, p));
-      if (!overlaps) {
-        placed.push(rect);
-        found = true;
-        break;
+        if (!withinBounds) continue;
+
+        const overlaps = placed.some((p) => rectsOverlap(rect, p));
+        if (!overlaps) {
+          x = dx;
+          y = dy;
+          placed.push(rect);
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        fontSize = Math.round(fontSize * 0.85);
       }
     }
 
-    if (!found) return; // não coube; a palavra é omitida do desenho
+    if (!found) return; // mesmo no menor tamanho aceitável, não coube
 
     const tier =
       norm > 0.75 ? 0 : norm > 0.5 ? 1 : norm > 0.25 ? 2 : norm > 0.1 ? 3 : 4;
