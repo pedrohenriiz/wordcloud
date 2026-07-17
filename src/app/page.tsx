@@ -1,65 +1,44 @@
-import Image from "next/image";
+'use client';
+
+import { useMemo, useState } from 'react';
+import InputPanel from '@/components/InputPanel';
+import TopWordsList from '@/components/TopWordsList';
+import { countWords, DEFAULT_OPTIONS, WordCloudOptions } from '@/lib/wordcloud';
+import WordCloud from '@/components/WordCloud';
+
+const SAMPLE_TEXT = `A linguagem é o instrumento mais antigo que a humanidade construiu.
+Toda palavra carrega uma história, um uso, um contexto que se repete e se
+transforma ao longo do tempo. Quando lemos um texto, algumas palavras
+aparecem várias vezes: elas revelam o tema, a intenção, o ritmo de quem
+escreveu. Um quadro de palavras é justamente isso: uma forma visual de
+notar repetição, de notar padrão, de notar o que insiste em aparecer.
+Repetição é significado. Padrão é significado. E toda palavra, pequena
+ou grande, comum ou rara, ajuda a compor o retrato de um texto.`;
 
 export default function Home() {
+  const [text, setText] = useState('');
+  const [options, setOptions] = useState<WordCloudOptions>(DEFAULT_OPTIONS);
+
+  const words = useMemo(() => countWords(text, options), [text, options]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className='mx-auto flex min-h-screen w-full max-w-350 flex-col gap-4 p-4 lg:h-screen lg:flex-row lg:overflow-hidden lg:p-6'>
+      <aside className='flex w-full flex-col gap-4 lg:h-full lg:w-95 lg:shrink-0 lg:overflow-y-auto'>
+        <InputPanel
+          text={text}
+          onTextChange={setText}
+          options={options}
+          onOptionsChange={setOptions}
+          wordCountFound={words.length}
+          onSample={() => setText(SAMPLE_TEXT)}
+          onClear={() => setText('')}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        <TopWordsList words={words} />
+      </aside>
+
+      <section className='min-h-120 flex-1 lg:h-full'>
+        <WordCloud words={words} />
+      </section>
+    </main>
   );
 }
