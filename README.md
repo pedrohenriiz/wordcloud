@@ -11,7 +11,7 @@ Cole qualquer texto e veja as palavras mais frequentes ganharem destaque num qua
 
 ---
 
-## ✨ O desafio
+## O desafio
 
 Desenvolver esse componente exigiu implementar toda a lógica de posicionamento sem recorrer a bibliotecas especializadas. O objetivo era distribuir dinamicamente os elementos na tela, evitando sobreposições, priorizando os itens mais relevantes e garantindo uma experiência fluida mesmo com atualizações em tempo real.
 
@@ -23,7 +23,7 @@ Os principais desafios técnicos envolveram:
 
 A solução implementada em `lib/placement.ts`: cada palavra é medida com `canvas.measureText`, e depois posicionada percorrendo uma **espiral de Arquimedes** a partir do centro — testando a _bounding box_ da palavra a cada passo contra as já colocadas, até achar a primeira posição livre. Palavras são processadas em ordem decrescente de frequência, então as mais importantes "ganham" as posições centrais.
 
-## 🧩 Funcionalidades
+## Funcionalidades
 
 - **Processamento de texto em tempo real**: tokenização, remoção de pontuação, contagem de frequência e filtro de _stopwords_ em português e inglês.
 - **Layout em espiral sem sobreposição**, calculado com `canvas.measureText` para medir cada palavra com precisão antes de posicioná-la.
@@ -33,7 +33,7 @@ A solução implementada em `lib/placement.ts`: cada palavra é medida com `canv
 - **Totalmente client-side**: nenhum texto sai do navegador, não existe backend nem API externa.
 - **Responsivo**, com `ResizeObserver` recalculando o layout quando a janela muda de tamanho.
 
-## 🛠️ Stack técnica
+## Stack técnica
 
 | Camada                 | Tecnologia                                                                                                                                  |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -44,13 +44,13 @@ A solução implementada em `lib/placement.ts`: cada palavra é medida com `canv
 | Lint/format            | [Biome](https://biomejs.dev/)                                                                                                               |
 | Renderização do quadro | SVG puro, sem canvas nem lib de gráficos                                                                                                    |
 
-## 🧠 Pipeline de dados
+## Pipeline de dados
 
 1. **Tokenização** (`lib/wordcloud.ts`) — o texto é normalizado, dividido em palavras, e filtrado por tamanho mínimo e _stopwords_. Depois é ordenado por frequência.
 2. **Escala** (`lib/placement.ts`) — a frequência de cada palavra é mapeada para um tamanho de fonte (interpolação linear entre um mínimo e um máximo, ambos proporcionais ao tamanho do quadro). O algoritmo de posicionamento em si está detalhado na seção **O desafio**, acima.
 3. **Renderização** — o resultado vira elementos `<text>` dentro de um único `<svg>`, o que permite exportar o quadro inteiro como arquivo `.svg` sem gerar imagem rasterizada.
 
-## 🚀 Rodando localmente
+## Rodando localmente
 
 ```bash
 git clone https://github.com/seu-usuario/quadro-de-palavras.git
@@ -68,7 +68,7 @@ npm run build
 npm start
 ```
 
-## 📁 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 src/
@@ -90,23 +90,23 @@ src/
     └── stopwords.ts        # listas de stopwords PT/EN
 ```
 
-## 🎨 Personalização
+## Personalização
 
 - **Cores e tipografia**: tudo fica em `@theme` dentro de `src/app/globals.css` — basta trocar as variáveis `--color-*` e `--font-*`.
 - **Stopwords**: edite `src/lib/stopwords.ts` para adicionar ou remover palavras ignoradas.
 - **Texto de exemplo**: constante `SAMPLE_TEXT` em `src/app/page.tsx`.
 
-## 🗺️ Possíveis melhorias futuras
+## Possíveis melhorias futuras
 
 - [ ] Exportar também como PNG (rasterizando o SVG em canvas)
 - [ ] Suporte a upload de arquivo `.txt` / `.pdf`
 - [ ] Testes automatizados para o algoritmo de posicionamento
 
-## 📄 Licença
+## Licença
 
 Distribuído sob a licença MIT. Veja `LICENSE` para mais detalhes.
 
-## 👤 Autor
+## Autor
 
 Feito por **Pedro Henrique** — [LinkedIn](https://www.linkedin.com/in/pedrohenriquedeveloper/) · [GitHub](https://github.com/pedrohenriiz)
 
@@ -114,4 +114,4 @@ Feito por **Pedro Henrique** — [LinkedIn](https://www.linkedin.com/in/pedrohen
 
 <a id="screenshots"></a>
 
-## 📸 Screenshots
+## Screenshots
